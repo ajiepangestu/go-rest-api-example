@@ -1,8 +1,8 @@
-package handler
+package handlers
 
 import (
 	"github.com/ajiepangestu/go-rest-api-example/database"
-	"github.com/ajiepangestu/go-rest-api-example/model"
+	"github.com/ajiepangestu/go-rest-api-example/models"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -16,9 +16,9 @@ func UserList(c *fiber.Ctx) error {
 		})
 	}
 	defer rows.Close()
-	result := model.Users{}
+	result := models.Users{}
 	for rows.Next() {
-		user := model.User{}
+		user := models.User{}
 		err := rows.Scan(&user.FirstName, &user.LastName, &user.Email)
 		if err != nil {
 			return c.Status(500).JSON(&fiber.Map{

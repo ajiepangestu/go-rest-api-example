@@ -1,9 +1,8 @@
 package main
 
 import (
-	"github.com/ajiepangestu/go-rest-api-example/config"
 	"github.com/ajiepangestu/go-rest-api-example/database"
-	"github.com/ajiepangestu/go-rest-api-example/handler"
+	"github.com/ajiepangestu/go-rest-api-example/handlers"
 	"github.com/ajiepangestu/go-rest-api-example/router"
 
 	"flag"
@@ -35,8 +34,8 @@ func main() {
 	router.SetupRoutes(app)
 
 	// Handle not founds
-	app.Use(handler.NotFound)
+	app.Use(handlers.NotFound)
 
 	// Listen on port 3000
-	log.Fatal(app.Listen(config.Config("SERVER_PORT"))) // go run app.go -port=:3000
+	log.Fatal(app.Listen("localhost:3000")) // go run app.go -port=:3000
 }
