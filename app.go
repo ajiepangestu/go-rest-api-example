@@ -1,8 +1,10 @@
 package main
 
 import (
-	"gofiber-restapi-example/database"
-	"gofiber-restapi-example/handlers"
+	"github.com/ajiepangestu/go-rest-api-example/config"
+	"github.com/ajiepangestu/go-rest-api-example/database"
+	"github.com/ajiepangestu/go-rest-api-example/handler"
+	"github.com/ajiepangestu/go-rest-api-example/router"
 
 	"flag"
 	"log"
@@ -12,10 +14,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
-var (
-	port = flag.String("port", ":3000", "Port to listen on")
-	prod = flag.Bool("prod", false, "Enable prefork in Production")
-)
+var prod = flag.Bool("prod", false, "Enable prefork in Production")
 
 func main() {
 	// Parse command-line flags
@@ -33,19 +32,11 @@ func main() {
 	app.Use(recover.New())
 	app.Use(logger.New())
 
-	// Create a /api/v1 endpoint
-	v1 := app.Group("/api/v1")
-
-	// Bind handlers
-	v1.Get("/users", handlers.UserList)
-	v1.Post("/users", handlers.UserCreate)
-
-	// Setup static files
-	app.Static("/", "./static/public")
+	router.SetupRoutes(app)
 
 	// Handle not founds
-	app.Use(handlers.NotFound)
+	app.Use(handler.NotFound)
 
 	// Listen on port 3000
-	log.Fatal(app.Listen(*port)) // go run app.go -port=:3000
+	log.Fatal(app.Listen(config.Config("SERVER_PORT"))) // go run app.go -port=:3000
 }

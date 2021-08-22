@@ -1,28 +1,30 @@
 package database
 
 import (
-	"gofiber-restapi-example/models"
+	"database/sql"
 	"fmt"
-	"sync"
+
+	_ "github.com/go-sql-driver/mysql"
+
+	"github.com/ajiepangestu/go-rest-api-example/config"
 )
 
-var (
-	db []*models.User
-	mu sync.Mutex
-)
+var DB *sql.DB
 
-// Connect with database
-func Connect() {
-	db = make([]*models.User, 0)
-	fmt.Println("Connected with Database")
-}
-
-func Insert(user *models.User) {
-	mu.Lock()
-	db = append(db, user)
-	mu.Unlock()
-}
-
-func Get() []*models.User {
-	return db
+func Connect() error {
+	var err error
+	// DSN format = username:password@protocol(address)/dbname?param=value
+	dsn := fmt.Sprintf("%s:%s@%s(%s:%s)/%s",
+		config.Config("DB_USER"),
+		config.Config("DB_PASSWORD"),
+		config.Config("DB_PROTOCOL"),
+		config.Config("DB_HOST"),
+		config.Config("DB_NAME"))
+	DB, err = sql.Open("mysql", dsn)
+	if err = DB.Ping(); err != nil {
+		return err
+	}
+	InitDatabase()
+	fmt.Println("Connection Opened to Database")
+	return nil
 }
