@@ -1,11 +1,13 @@
 package main
 
 import (
+	"github.com/ajiepangestu/go-rest-api-example/config"
 	"github.com/ajiepangestu/go-rest-api-example/database"
 	"github.com/ajiepangestu/go-rest-api-example/handlers"
 	"github.com/ajiepangestu/go-rest-api-example/router"
 
 	"flag"
+	"fmt"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -37,5 +39,5 @@ func main() {
 	app.Use(handlers.NotFound)
 
 	// Listen on port 3000
-	log.Fatal(app.Listen("localhost:3000")) // go run app.go -port=:3000
+	log.Fatal(app.Listen(fmt.Sprintf("%s:%s", config.Config("SERVER_HOST"), config.Config("SERVER_PORT")))) // go run app.go -port=:3000
 }
