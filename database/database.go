@@ -19,7 +19,9 @@ func Connect() error {
 		config.Config("DB_PASSWORD"),
 		config.Config("DB_PROTOCOL"),
 		config.Config("DB_HOST"),
-		config.Config("DB_NAME"))
+		config.Config("DB_PORT"),
+		config.Config("DB_NAME"),
+	)
 	DB, err = sql.Open("mysql", dsn)
 	if err = DB.Ping(); err != nil {
 		return err

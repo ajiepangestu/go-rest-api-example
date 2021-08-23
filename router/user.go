@@ -6,5 +6,5 @@ import (
 )
 
 func UserRoute(api fiber.Router) {
-	api.Get("/", handlers.UserList)
+	api.Get("/", handlers.GetUserList)
 }

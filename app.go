@@ -20,24 +20,25 @@ var prod = flag.Bool("prod", false, "Enable prefork in Production")
 func main() {
 	// Parse command-line flags
 	flag.Parse()
-
 	// Connected with database
 	database.Connect()
-
 	// Create fiber app
 	app := fiber.New(fiber.Config{
-		Prefork: *prod, // go run app.go -prod
+		// go run app.go -prod
+		Prefork: *prod,
 	})
-
 	// Middleware
 	app.Use(recover.New())
 	app.Use(logger.New())
-
+	// Setup Routes
 	router.SetupRoutes(app)
-
+	//Test Router
+	router.TestRoutes(app)
 	// Handle not founds
 	app.Use(handlers.NotFound)
-
-	// Listen on port 3000
-	log.Fatal(app.Listen(fmt.Sprintf("%s:%s", config.Config("SERVER_HOST"), config.Config("SERVER_PORT")))) // go run app.go -port=:3000
+	//Run Server
+	log.Fatal(app.Listen(fmt.Sprintf("%s:%s",
+		config.Config("SERVER_HOST"),
+		config.Config("SERVER_PORT"),
+	)))
 }
