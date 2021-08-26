@@ -39,13 +39,13 @@
 
 ## Database Connection
 
-## Parameter Placeholder Syntax
-
 **Database**|MySQL | PostgreSQL | Oracle |
 ------|----- |             ----- |            ----- |
-**DSN Format** | username:password@protocol(address)/dbname?param=value | host={host} port={port} user={user} password={password} dbname={dbname} sslmode=disable | Coming Soon |
+**DSN Format** | username:password@ protocol(address)/dbname? param=value | host={host} port={port} user={user} password={password} dbname={dbname} sslmode=disable | Coming Soon |
 **Open Connection** | sql.Open("mysql", dsn) | sql.Open("postgres", dsn) | Coming Soon|
 **Driver** | _ "github.com/go-sql-driver/mysql" |  _ "github.com/lib/pq" | Coming Soon |
+
+## Parameter Placeholder Syntax
 
 MySQL |               PostgreSQL |            Oracle |
 ----- |             ----- |            ----- |
