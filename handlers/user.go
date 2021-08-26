@@ -90,5 +90,13 @@ func UpdateUser(c *fiber.Ctx) error {
 }
 
 func DeleteUser(c *fiber.Ctx) error {
-	return nil
+	deleteRow, err := database.DB.Query("DELETE FROM users WHERE email = ?", c.Params("email"))
+	if err != nil {
+		return c.Status(500).JSON(&fiber.Map{
+			"success": false,
+			"error":   err,
+		})
+	}
+	defer deleteRow.Close()
+	return err
 }
