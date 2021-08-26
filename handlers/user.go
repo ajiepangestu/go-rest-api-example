@@ -8,7 +8,17 @@ import (
 )
 
 func CreateUser(c *fiber.Ctx) error {
-	return nil
+	insert, err := database.DB.Query("INSERT INTO users (first_name, last_name, email) VALUES (?, ?, ?)",
+		c.Params("first_name"), c.Params("last_name"), c.Params("email"),
+	)
+	if err != nil {
+		return c.Status(500).JSON(&fiber.Map{
+			"success": false,
+			"error":   err,
+		})
+	}
+	defer insert.Close()
+	return err
 }
 
 func GetUserList(c *fiber.Ctx) error {
