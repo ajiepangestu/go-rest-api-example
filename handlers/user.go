@@ -23,8 +23,7 @@ func GetUserList(c *fiber.Ctx) error {
 	result := models.Users{}
 	for rows.Next() {
 		user := models.User{}
-		err := rows.Scan(&user.FirstName, &user.LastName, &user.Email)
-		if err != nil {
+		if err := rows.Scan(&user.FirstName, &user.LastName, &user.Email); err != nil {
 			return c.Status(500).JSON(&fiber.Map{
 				"success": false,
 				"error":   err,
@@ -35,7 +34,7 @@ func GetUserList(c *fiber.Ctx) error {
 	if err := c.JSON(&fiber.Map{
 		"success": true,
 		"data":    result,
-		"message": "All user returned successfully",
+		"message": "All user data returned successfully",
 	}); err != nil {
 		return c.Status(500).JSON(&fiber.Map{
 			"success": false,
@@ -46,8 +45,34 @@ func GetUserList(c *fiber.Ctx) error {
 }
 
 func GetUser(c *fiber.Ctx) error {
-	return nil
-
+	row, err := database.DB.Query("SELECT first_name, last_name, email FROM users WHERE id = ?", c.Params("id"))
+	if err != nil {
+		return c.Status(500).JSON(&fiber.Map{
+			"success": false,
+			"error":   err,
+		})
+	}
+	defer row.Close()
+	user := models.User{}
+	for row.Next() {
+		if err := row.Scan(&user.FirstName, &user.LastName, &user.Email); err != nil {
+			return c.Status(500).JSON(&fiber.Map{
+				"success": false,
+				"error":   err,
+			})
+		}
+	}
+	if c.JSON(&fiber.Map{
+		"success": true,
+		"data":    user,
+		"message": "User data returned successfully",
+	}); err != nil {
+		return c.Status(500).JSON(&fiber.Map{
+			"success": false,
+			"error":   err,
+		})
+	}
+	return err
 }
 
 func UpdateUser(c *fiber.Ctx) error {
